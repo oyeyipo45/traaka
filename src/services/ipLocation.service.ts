@@ -1,10 +1,10 @@
 import * as ipLocationRepository from '../repository/ipLocation.repository';
 
-export const createIpLocation = async (domain : String): Promise<any> => {
+export const createIpLocation = async (domain: string): Promise<any> => {
   try {
-    const user = await ipLocationRepository.createIpLocation(domain);
+    const location = await ipLocationRepository.createIpLocation(domain);
 
-    return user;
+    return location;
   } catch (error) {
     throw error;
   }

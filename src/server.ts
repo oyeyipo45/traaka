@@ -4,8 +4,7 @@ import app from './app';
 dotenv.config();
 
 
-const port = parseInt(process.env.PORT!) || 5000;
-
+const port = parseInt(process.env.PORT!) || 5001;
 
 
 app.listen(Number(port), () => {

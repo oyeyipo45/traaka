@@ -1,0 +1,1 @@
+export const ipLocationUrl = 'https://api.ipgeolocation.io/ipgeo';
