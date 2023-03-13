@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "domain": "google.com",
+    "long": "ipgeolocation.io",
+    "lat": "ipgeolocation.io",
+    "geoname_id": "ipgeolocation.io",
+    "isActive": false
+  },
+   {
+     "id": 1,
+     "domain": "facebook.com",
+     "long": "google.com..io",
+     "lat": "google.com..io",
+     "geoname_id": "google.com..io",
+     "isActive": true
+   }
+]
