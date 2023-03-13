@@ -1,12 +1,8 @@
-import dotenv from 'dotenv';
 import app from './app';
+import { config } from './config/config';
 
-dotenv.config();
+const port = config.PORT || 5001;
 
-
-const port = parseInt(process.env.PORT!) || 5001;
-
-
-app.listen(Number(port), () => {
+app.listen(port, () => {
   console.log(`App listening on http://localhost:${port}`);
 });

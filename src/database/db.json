@@ -2,17 +2,17 @@
   {
     "id": 1,
     "domain": "google.com",
-    "long": "ipgeolocation.io",
-    "lat": "ipgeolocation.io",
-    "geoname_id": "ipgeolocation.io",
-    "isActive": false
+    "lat": "37.42240",
+    "long": "-122.08421",
+    "geoname_id": "6301403",
+    "isActive": true
   },
    {
-     "id": 1,
+     "id": 2,
      "domain": "facebook.com",
-     "long": "google.com..io",
-     "lat": "google.com..io",
-     "geoname_id": "google.com..io",
+    "latitude": "37.48221",
+     "longitude": "-122.15049",
+     "geoname_id": "11788840",
      "isActive": true
    }
 ]
