@@ -15,8 +15,16 @@ export const getIpLocations = async (): Promise<any> => {
   try {
     const locations = await ipLocationRepository.getIpLocations();
 
-    console.log(locations, 'locations2');
-    
+    return locations;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getIpLocationById = async (id : string): Promise<any> => {
+  try {
+    const locations = await ipLocationRepository.getIpLocationById(id);
 
     return locations;
   } catch (error) {

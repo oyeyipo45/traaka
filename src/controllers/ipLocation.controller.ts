@@ -30,12 +30,27 @@ export const getIpLocations = async (
   try {
 
       const locations: IpLocation = await LocationService.getIpLocations();
-      
-      console.log(locations, 'locations');
-      
 
     res.status(200).json({
       locations,
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getIpLocationById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+
+  const { id } = req.params
+  try {
+    const location: IpLocation = await LocationService.getIpLocationById(id);
+
+    res.status(200).json({
+      location,
     });
   } catch (error) {
     throw error;

@@ -9,8 +9,8 @@ import {
 
 @Entity()
 export class Queries {
-  @PrimaryGeneratedColumn()
-  id?: number;
+  @Column()
+  id?: string;
 
   @Column()
   domain: string;

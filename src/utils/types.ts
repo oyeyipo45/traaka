@@ -1,4 +1,4 @@
-export type IpLocation = {
+export interface IpLocation  {
   id?: number;
   domain?: string;
   long?: string;
