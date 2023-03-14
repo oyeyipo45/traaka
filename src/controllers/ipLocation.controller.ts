@@ -21,3 +21,23 @@ export const createIpLocation = async (
     throw error;
   }
 };
+
+export const getIpLocations = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+
+      const locations: IpLocation = await LocationService.getIpLocations();
+      
+      console.log(locations, 'locations');
+      
+
+    res.status(200).json({
+      locations,
+    });
+  } catch (error) {
+    throw error;
+  }
+};
