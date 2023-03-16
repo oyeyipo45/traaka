@@ -22,8 +22,6 @@ export const createIpLocation = async (domain: string): Promise<any> => {
     if (!foundLocation) {
       const location: IpLocation = await getIpLocationDetails(domain);
 
-      console.log(location, 'location');
-
       dbLocations.push(location);
 
       await insertLocation(dbLocations);

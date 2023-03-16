@@ -30,6 +30,10 @@ NOTE: The Main branch is the update branch for the codebase
 You are now ready to launch the Express application using the command below.
 
 ```sh
+# Create file for secrets in the root folder with the name below
+.env
+```
+```sh
 # Install  dependencies with yarn command
 yarn
 ```
