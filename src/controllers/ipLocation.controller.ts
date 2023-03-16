@@ -11,14 +11,21 @@ export const createIpLocation = async (
   try {
     const { domain } = req.body;
 
-    const location: IpLocation = await LocationService.createIpLocation(domain);
+    const { data } = await LocationService.createIpLocation(domain);
 
     res.status(201).json({
-      message: `Location created successfully`,
+      message:
+        data === true
+          ? `Location created successfully`
+          : `Location already exists`,
     });
   } catch (error: any) {
+    const errorMessage =
+      error?.response?.status === 404
+        ? 'Api could not find Domain Details, please try another Domain'
+        : error?.message;
     res.status(400).json({
-      message: error?.message,
+      message: errorMessage,
     });
   }
 };
@@ -68,10 +75,8 @@ export const updateIpLocationById = async (
   const { id } = req.params;
   const { domain, long, lat, geoname_id, isActive } = req.body;
 
-  const ip = parseInt(id);
-
   const payload: IUpdateIpLocationDto = {
-    id: ip,
+    id,
     domain,
     long,
     lat,
@@ -79,9 +84,7 @@ export const updateIpLocationById = async (
     isActive,
   };
   try {
-    const location: IpLocation = await LocationService.updateIpLocationById(
-      payload
-    );
+    const location = await LocationService.updateIpLocationById(payload);
 
     res.status(200).json({
       message: `Location with Id ${id} updated successfully`,
@@ -92,8 +95,6 @@ export const updateIpLocationById = async (
     });
   }
 };
-
-
 
 export const deleteIpLocation = async (
   req: Request,

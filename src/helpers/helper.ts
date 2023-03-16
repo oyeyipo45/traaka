@@ -10,6 +10,12 @@ const X_RapidAPI_Key = config.X_RapidAPI_Key;
 
 export const getIpLocationDetails = async (domain: string) => {
   try {
+    const locations: Array<IpLocation> = await getDBLocations();
+
+    const foundLocation = locations.find(
+      (ipLocation) => exactString(ipLocation?.domain) === exactString(domain)
+    );
+
     const { data } = await axios.get(
       'https://find-any-ip-address-or-domain-location-world-wide.p.rapidapi.com/iplocation',
       {
@@ -25,16 +31,6 @@ export const getIpLocationDetails = async (domain: string) => {
       }
     );
 
-    const locations: Array<IpLocation> = await getDBLocations();
-
-    const foundLocation = locations.find(
-      (ipLocation) => exactString(ipLocation?.domain) === exactString(domain)
-    );
-
-    if (foundLocation) {
-      throw new Error('Location exists already');
-    }
-
     const location: IpLocation = {
       id: locations.length + 1,
       domain: domain,
@@ -45,7 +41,7 @@ export const getIpLocationDetails = async (domain: string) => {
     };
 
     return location;
-  } catch (error) {
+  } catch (error: any) {
     throw error;
   }
 };
@@ -62,8 +58,8 @@ export const insertLocation = async (locations: Array<IpLocation>) => {
   let data = JSON.stringify(locations, null, 2);
 
   fs.writeFile(db, data, (err) => {
-    if (err) throw err;
-    console.log('Data written to file');
+    if (err)
+      throw new Error('Error occures while inserting locations to database');
   });
 
   return true;
@@ -81,5 +77,27 @@ export const findLocation = async (id: number) => {
 
   const location = parsedData.find((ipLocation) => ipLocation.id === id);
 
+  if (!location) {
+    throw new Error(`Location with id : ${id} does not exist`);
+  }
+
   return location;
+};
+
+export const findLocationByIndex = async (id: string) => {
+  const locationId = parseInt(id);
+
+  const dbLocations: Array<IpLocation> = await getDBLocations();
+
+  const location = dbLocations.findIndex(
+    (ipLocation) => ipLocation.id === locationId
+  );
+
+  if (location < 0) {
+    throw new Error(`Location with id : ${id} does not exist`);
+  }
+
+  const data = await findLocation(locationId);
+
+  return { location, dbLocations, data };
 };

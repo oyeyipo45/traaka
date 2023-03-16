@@ -2,7 +2,9 @@ import { db, ipLocationUrl } from '../utils/constants';
 import { readFile } from 'fs/promises';
 import { IpLocation, Locations } from '../utils/types';
 import {
+  exactString,
   findLocation,
+  findLocationByIndex,
   getDBLocations,
   getIpLocationDetails,
   insertLocation,
@@ -11,17 +13,26 @@ import { IUpdateIpLocationDto } from '../dtos/ipLocation.dto';
 
 export const createIpLocation = async (domain: string): Promise<any> => {
   try {
-
     const dbLocations: Array<IpLocation> = await getDBLocations();
 
-    const location: IpLocation = await getIpLocationDetails(domain);
+    const foundLocation: IpLocation | undefined = dbLocations.find(
+      (ipLocation) => exactString(ipLocation?.domain) === exactString(domain)
+    );
 
-    dbLocations.push(location);
+    if (!foundLocation) {
+      const location: IpLocation = await getIpLocationDetails(domain);
 
-    await insertLocation(dbLocations);
+      console.log(location, 'location');
 
-    return location;
-  } catch (error) {
+      dbLocations.push(location);
+
+      await insertLocation(dbLocations);
+
+      return { data: true };
+    }
+
+    return { data: false };
+  } catch (error: any) {
     throw error;
   }
 };
@@ -35,10 +46,6 @@ export const getIpLocationById = async (id: string): Promise<any> => {
 
   const location = await findLocation(locationId);
 
-  if (!location) {
-    throw new Error(`Location with id : ${id} does not exist`);
-  }
-
   return location;
 };
 
@@ -47,16 +54,10 @@ export const updateIpLocationById = async (
 ): Promise<any> => {
   const { id, domain, long, lat, geoname_id, isActive } = payload;
 
-  const dbLocations: Array<IpLocation> = await getDBLocations();
-
-  const location = dbLocations.findIndex((ipLocation) => ipLocation.id === id);
-
-  if (location < 0) {
-    throw new Error(`Location with id : ${id} does not exist`);
-  }
+  const { location, dbLocations } = await findLocationByIndex(id);
 
   dbLocations[location] = {
-    id,
+    id: parseInt(id),
     domain,
     long,
     lat,
@@ -71,21 +72,19 @@ export const updateIpLocationById = async (
   return updatedLocation;
 };
 
-
 export const deleteIpLocation = async (id: string): Promise<any> => {
-  const locationId = parseInt(id);
+  const { location, dbLocations, data } = await findLocationByIndex(id);
 
- const location = await findLocation(locationId);
+  dbLocations[location] = {
+    id: data.id,
+    domain: data.domain,
+    long: data.long,
+    lat: data.lat,
+    geoname_id: data.geoname_id,
+    isActive: false,
+  };
 
-  if (!location) {
-    throw new Error(`Location with id : ${id} does not exist`);
-  }
+  await insertLocation(dbLocations);
 
-   const dbLocations: Array<IpLocation> = await getDBLocations();
-
-  const newLocations = dbLocations.filter((location) => location.id !== locationId)
-
-  await insertLocation(newLocations);
-  
   return true;
 };

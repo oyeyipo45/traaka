@@ -1,8 +1,8 @@
 export interface IUpdateIpLocationDto {
-  id: number;
-  domain?: string;
-  long?: string;
-  lat?: string;
-  geoname_id?: string;
-  isActive?: Boolean;
+  id: string;
+  domain: string;
+  long: string;
+  lat: string;
+  geoname_id: string;
+  isActive: Boolean;
 }
