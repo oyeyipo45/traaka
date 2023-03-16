@@ -2,6 +2,7 @@ import { db, ipLocationUrl } from '../utils/constants';
 import { readFile } from 'fs/promises';
 import { IpLocation, Locations } from '../utils/types';
 import {
+  findLocation,
   getDBLocations,
   getIpLocationDetails,
   insertLocation,
@@ -11,13 +12,13 @@ import { IUpdateIpLocationDto } from '../dtos/ipLocation.dto';
 export const createIpLocation = async (domain: string): Promise<any> => {
   try {
 
-    const locations: Array<IpLocation> = await getDBLocations();
+    const dbLocations: Array<IpLocation> = await getDBLocations();
 
     const location: IpLocation = await getIpLocationDetails(domain);
 
-    locations.push(location);
+    dbLocations.push(location);
 
-    await insertLocation(locations);
+    await insertLocation(dbLocations);
 
     return location;
   } catch (error) {
@@ -32,11 +33,7 @@ export const getIpLocations = async (): Promise<any> => {
 export const getIpLocationById = async (id: string): Promise<any> => {
   const locationId = parseInt(id);
 
-  const parsedData: Array<IpLocation> = await getDBLocations();
-
-  const location = parsedData.find(
-    (ipLocation) => ipLocation.id === locationId
-  );
+  const location = await findLocation(locationId);
 
   if (!location) {
     throw new Error(`Location with id : ${id} does not exist`);
@@ -50,13 +47,15 @@ export const updateIpLocationById = async (
 ): Promise<any> => {
   const { id, domain, long, lat, geoname_id, isActive } = payload;
 
-  console.log(id, domain, long, lat, geoname_id, isActive);
+  const dbLocations: Array<IpLocation> = await getDBLocations();
 
-  const parsedData: Array<IpLocation> = await getDBLocations();
+  const location = dbLocations.findIndex((ipLocation) => ipLocation.id === id);
 
-  const location = parsedData.findIndex((ipLocation) => ipLocation.id === id);
+  if (location < 0) {
+    throw new Error(`Location with id : ${id} does not exist`);
+  }
 
-  parsedData[location] = {
+  dbLocations[location] = {
     id,
     domain,
     long,
@@ -65,7 +64,28 @@ export const updateIpLocationById = async (
     isActive,
   };
 
-  const upatedLocation = parsedData[location];
+  const updatedLocation = dbLocations[location];
 
-  return upatedLocation;
+  await insertLocation(dbLocations);
+
+  return updatedLocation;
+};
+
+
+export const deleteIpLocation = async (id: string): Promise<any> => {
+  const locationId = parseInt(id);
+
+ const location = await findLocation(locationId);
+
+  if (!location) {
+    throw new Error(`Location with id : ${id} does not exist`);
+  }
+
+   const dbLocations: Array<IpLocation> = await getDBLocations();
+
+  const newLocations = dbLocations.filter((location) => location.id !== locationId)
+
+  await insertLocation(newLocations);
+  
+  return true;
 };

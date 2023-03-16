@@ -14,7 +14,7 @@ export const createIpLocation = async (
     const location: IpLocation = await LocationService.createIpLocation(domain);
 
     res.status(201).json({
-      location,
+      message: `Location created successfully`,
     });
   } catch (error: any) {
     res.status(400).json({
@@ -84,7 +84,28 @@ export const updateIpLocationById = async (
     );
 
     res.status(200).json({
-      location,
+      message: `Location with Id ${id} updated successfully`,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      message: error?.message,
+    });
+  }
+};
+
+
+
+export const deleteIpLocation = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  const { id } = req.params;
+  try {
+    const location: IpLocation = await LocationService.deleteIpLocation(id);
+
+    res.status(200).json({
+      message: `Location with Id ${id} deleted successfully`,
     });
   } catch (error: any) {
     res.status(400).json({

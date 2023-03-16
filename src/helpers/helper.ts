@@ -75,3 +75,11 @@ export const exactString = (domain: string | undefined) => {
     ?.replace(/\s/g, '')
     ?.replace(/[^\w\s]/gi, '');
 };
+
+export const findLocation = async (id: number) => {
+  const parsedData: Array<IpLocation> = await getDBLocations();
+
+  const location = parsedData.find((ipLocation) => ipLocation.id === id);
+
+  return location;
+};

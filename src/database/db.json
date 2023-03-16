@@ -1,13 +1,5 @@
 [
   {
-    "id": 1,
-    "domain": "google.com",
-    "long": -97.822,
-    "lat": 37.751,
-    "geoname_id": 6255149,
-    "isActive": true
-  },
-  {
     "id": 2,
     "domain": "google.com",
     "long": -97.822,
@@ -18,10 +10,10 @@
   {
     "id": 3,
     "domain": "google.com",
-    "long": -97.822,
-    "lat": 37.751,
-    "geoname_id": 6255149,
-    "isActive": true
+    "long": "string",
+    "lat": "string",
+    "geoname_id": "string",
+    "isActive": false
   },
   {
     "id": 4,

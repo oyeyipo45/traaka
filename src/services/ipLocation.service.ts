@@ -45,3 +45,16 @@ export const updateIpLocationById = async (
     throw error;
   }
 };
+
+
+export const deleteIpLocation = async (
+  id: string
+): Promise<any> => {
+  try {
+    const location = await ipLocationRepository.deleteIpLocation(id);
+
+    return location;
+  } catch (error) {
+    throw error;
+  }
+};
