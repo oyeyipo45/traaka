@@ -1,7 +1,7 @@
 import { NextFunction, Response, Request } from 'express';
+import { IUpdateIpLocationDto } from '../dtos/ipLocation.dto';
 import * as LocationService from '../services/ipLocation.service';
 import { IpLocation } from '../utils/types';
-
 
 export const createIpLocation = async (
   req: Request,
@@ -9,7 +9,6 @@ export const createIpLocation = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-
     const { domain } = req.body;
 
     const location: IpLocation = await LocationService.createIpLocation(domain);
@@ -17,8 +16,10 @@ export const createIpLocation = async (
     res.status(201).json({
       location,
     });
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    res.status(400).json({
+      message: error?.message,
+    });
   }
 };
 
@@ -28,14 +29,15 @@ export const getIpLocations = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-
-      const locations: IpLocation = await LocationService.getIpLocations();
+    const locations: IpLocation = await LocationService.getIpLocations();
 
     res.status(200).json({
       locations,
     });
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    res.status(400).json({
+      message: error?.message,
+    });
   }
 };
 
@@ -44,15 +46,49 @@ export const getIpLocationById = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-
-  const { id } = req.params
+  const { id } = req.params;
   try {
     const location: IpLocation = await LocationService.getIpLocationById(id);
 
     res.status(200).json({
       location,
     });
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    res.status(400).json({
+      message: error?.message,
+    });
+  }
+};
+
+export const updateIpLocationById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  const { id } = req.params;
+  const { domain, long, lat, geoname_id, isActive } = req.body;
+
+  const ip = parseInt(id);
+
+  const payload: IUpdateIpLocationDto = {
+    id: ip,
+    domain,
+    long,
+    lat,
+    geoname_id,
+    isActive,
+  };
+  try {
+    const location: IpLocation = await LocationService.updateIpLocationById(
+      payload
+    );
+
+    res.status(200).json({
+      location,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      message: error?.message,
+    });
   }
 };

@@ -2,17 +2,33 @@
   {
     "id": 1,
     "domain": "google.com",
-    "lat": "37.42240",
-    "long": "-122.08421",
-    "geoname_id": "6301403",
+    "long": -97.822,
+    "lat": 37.751,
+    "geoname_id": 6255149,
     "isActive": true
   },
-   {
-     "id": 2,
-     "domain": "facebook.com",
-    "latitude": "37.48221",
-     "longitude": "-122.15049",
-     "geoname_id": "11788840",
-     "isActive": true
-   }
+  {
+    "id": 2,
+    "domain": "google.com",
+    "long": -97.822,
+    "lat": 37.751,
+    "geoname_id": 6255149,
+    "isActive": true
+  },
+  {
+    "id": 3,
+    "domain": "google.com",
+    "long": -97.822,
+    "lat": 37.751,
+    "geoname_id": 6255149,
+    "isActive": true
+  },
+  {
+    "id": 4,
+    "domain": "google.com",
+    "long": -97.822,
+    "lat": 37.751,
+    "geoname_id": 6255149,
+    "isActive": true
+  }
 ]
